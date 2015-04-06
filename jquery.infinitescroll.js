@@ -73,7 +73,8 @@
         prefill: false, // When the document is smaller than the window, load data until the document is larger or links are exhausted
         maxPage: undefined // to manually control maximum page (when maxPage is undefined, maximum page limitation is not work)
         type: 'GET',
-        data: undefined
+        data: undefined,
+        beforeAjax: undefined
     };
 
     $.infinitescroll.prototype = {
@@ -581,6 +582,11 @@
 
                 case 'html':
                     instance._debug('Using ' + (method.toUpperCase()) + ' via $.ajax() method');
+                    
+                    if(opts.beforeAjax !== undefined && typeof opts.beforeAjax === 'function'){
+                        opts.beforeAjax({page:  opts.state.currPage, url: desturl});   
+                    }
+                    
                     $.ajax({
                         // params
                         method: opts.type,
